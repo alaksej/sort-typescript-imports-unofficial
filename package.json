@@ -3,16 +3,16 @@
   "displayName": "Sort Typescript Imports (Unoffical)",
   "description": "Sorts import statements in Typescript code",
   "version": "1.4.0",
-  "publisher": "miclo",
+  "publisher": "alaksej",
   "license": "MIT",
   "icon": "images/icon.png",
   "bugs": {
-    "url": "https://github.com/MLoughry/sort-typescript-imports/issues"
+    "url": "https://github.com/alaksej/sort-typescript-imports-unofficial/issues"
   },
-  "homepage": "https://github.com/MLoughry/sort-typescript-imports/blob/master/README.md",
+  "homepage": "https://github.com/alaksej/sort-typescript-imports-unofficial/blob/master/README.md",
   "repository": {
     "type": "git",
-    "url": "https://github.com/MLoughry/sort-typescript-imports.git"
+    "url": "https://github.com/alaksej/sort-typescript-imports-unofficial"
   },
   "engines": {
     "vscode": "^1.10.0"
