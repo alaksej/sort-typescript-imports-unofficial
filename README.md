@@ -39,7 +39,10 @@ This configurable extension allows you to sort all the imports in a *.ts or *.ts
 
 ## Release Notes
 
-## 1.3.0
+## 1.4.0 (unofficial) 
+- Added sorting by regexps and option to insert empty line to separate blocks of imports
+
+### 1.3.0
 - Added configuration option to omit the semicolon at the end of the import clause.
 
 ### 1.2.0
@@ -51,3 +54,23 @@ This configurable extension allows you to sort all the imports in a *.ts or *.ts
 ### 1.0.0
 
 Initial release
+
+## Example config
+
+    "typescript.extension.sortImports.pathSortOrder": [
+        "package",
+        "relativeUpLevel",
+        "relativeDownLevel"
+    ],
+    "typescript.extension.sortImports.regexSortOrder": [
+        {"expression": "@", "priority": 0 },
+        {"expression": "app/core|app/shared", "priority": 2 },
+        {"expression": "^app/|^\\.\\.\/", "priority": 3 },
+        {"expression": "^\\.\/", "priority": 4 },
+        {"expression": ".", "priority": 0 }
+    ],
+    "typescript.extension.sortImports.sortMethod": "regex",
+    "typescript.extension.sortImports.useEmptyLineBetweenBlocks": true,
+    "typescript.extension.sortImports.sortOnSave": true,
+    "typescript.extension.sortImports.maxNamedImportsInSingleLine": 1,
+    "vsicons.projectDetection.autoReload": true
