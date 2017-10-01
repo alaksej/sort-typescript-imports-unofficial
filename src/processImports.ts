@@ -16,6 +16,9 @@ function compareImportClauses(a: TypescriptImport, b: TypescriptImport) {
     if (options.getSortOption() === 'path') {
         return comparePath(a, b)
             || compareCaseInsensitive(a.path, b.path);
+    } else if (options.getSortOption() === 'regex') {
+        return compareRegex(a, b) 
+            || compareCaseInsensitive(a.path, b.path)
     } else {
         return compareImportType(a, b)
             || (a.namespace && compareCaseInsensitive(a.namespace, b.namespace))
@@ -33,6 +36,10 @@ function comparePath(a: TypescriptImport, b: TypescriptImport) {
     return getPathPriority(a.path) - getPathPriority(b.path);
 }
 
+function compareRegex(a: TypescriptImport, b: TypescriptImport) {
+    return getRegexPriority(a.path) - getRegexPriority(b.path);
+}
+
 function getPathPriority(path: string) {
     let sortOrder = options.getPathSortOrdering();
     if (/^\.\//.test(path)) {
@@ -42,6 +49,17 @@ function getPathPriority(path: string) {
     } else {
         return sortOrder.indexOf('package');
     }
+}
+
+function getRegexPriority(path: string): number {
+    const sortOrders = options.getRegexSortOrdering();
+    for (let i = 0; i < sortOrders.length; i++) {
+        const regex = new RegExp(sortOrders[i].expression);
+        if (regex.test(path)) {
+            return sortOrders[i].priority
+        }
+    }
+    return 1000000;
 }
 
 function compareImportType(a: TypescriptImport, b: TypescriptImport) {

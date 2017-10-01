@@ -1,4 +1,5 @@
 import * as vscode from 'vscode';
+import { RegexSortingItem } from './regexSortingItem';
 
 export function getTabString(editor: vscode.TextEditor = vscode.window.activeTextEditor) {
     if (editor.options.insertSpaces) {
@@ -32,6 +33,10 @@ export function shouldSortOnSave(): boolean {
 
 export function getPathSortOrdering(): string[] {
     return getExtensionConfig().get('pathSortOrder') as string[];
+}
+
+export function getRegexSortOrdering(): RegexSortingItem[] {
+    return getExtensionConfig().get('regexSortOrder') as RegexSortingItem[];
 }
 
 export function getOmitSemicolon(): boolean {

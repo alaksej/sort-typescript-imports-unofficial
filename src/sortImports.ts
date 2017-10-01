@@ -10,6 +10,6 @@ export default function sortImports(document: vscode.TextDocument) {
 
     let edits: vscode.TextEdit[] = imports.map(importClause => vscode.TextEdit.delete(importClause.range));
     edits.push(vscode.TextEdit.insert(new vscode.Position(0, 0), sortedImportText));
-
+    console.log('sorting complete');
     return edits;
 }
