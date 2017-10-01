@@ -13,6 +13,10 @@ export function getMaxNamedImportsPerSingleLine() {
     return getExtensionConfig().get('maxNamedImportsInSingleLine');
 }
 
+export function getUseEmptyLineBetweenBlocks() {
+    return getExtensionConfig().get('useEmptyLineBetweenBlocks');
+}
+
 export function getSortOption() {
     return getExtensionConfig().get('sortMethod');
 }

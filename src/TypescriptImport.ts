@@ -13,4 +13,5 @@ export interface TypescriptImport {
     default?: string;
     namedImports?: DestructedImport[];
     namespace?: string;
+    priority?: number;
 }

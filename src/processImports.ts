@@ -1,8 +1,9 @@
 import * as options from './options';
 import { TypescriptImport } from './TypescriptImport';
+import * as vscode from 'vscode';
 
 export default function processImports(importClauses: TypescriptImport[]): TypescriptImport[] {
-    return importClauses
+    importClauses = importClauses
         .map(importClause => {
             if (importClause.namedImports) {
                 importClause.namedImports.sort((a, b) => a.importName.localeCompare(b.importName, 'en', 'base'));
@@ -10,6 +11,23 @@ export default function processImports(importClauses: TypescriptImport[]): Types
             return importClause;
         })
         .sort(compareImportClauses);
+
+    if (options.getUseEmptyLineBetweenBlocks()
+        && importClauses.length) {
+        const expanded: TypescriptImport[] = [];
+        let currentPriority: number = importClauses[0].priority;
+        for (let i = 0; i < importClauses.length; i++) {
+            if (importClauses[i].priority !== currentPriority
+                && i !== importClauses.length - 1) {
+                expanded.push({} as any);
+                currentPriority = importClauses[i].priority;
+            }
+            expanded.push(importClauses[i]);
+        }
+        return expanded;
+    }
+
+    return importClauses;
 }
 
 function compareImportClauses(a: TypescriptImport, b: TypescriptImport) {
@@ -17,7 +35,7 @@ function compareImportClauses(a: TypescriptImport, b: TypescriptImport) {
         return comparePath(a, b)
             || compareCaseInsensitive(a.path, b.path);
     } else if (options.getSortOption() === 'regex') {
-        return compareRegex(a, b) 
+        return compareRegex(a, b)
             || compareCaseInsensitive(a.path, b.path)
     } else {
         return compareImportType(a, b)
@@ -33,11 +51,15 @@ function compareCaseInsensitive(a: string, b: string) {
 }
 
 function comparePath(a: TypescriptImport, b: TypescriptImport) {
-    return getPathPriority(a.path) - getPathPriority(b.path);
+    a.priority = getPathPriority(a.path);
+    b.priority = getPathPriority(b.path);
+    return a.priority - b.priority;
 }
 
 function compareRegex(a: TypescriptImport, b: TypescriptImport) {
-    return getRegexPriority(a.path) - getRegexPriority(b.path);
+    a.priority = getRegexPriority(a.path);
+    b.priority = getRegexPriority(b.path);
+    return a.priority - b.priority;
 }
 
 function getPathPriority(path: string) {

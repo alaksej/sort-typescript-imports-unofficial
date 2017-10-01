@@ -11,6 +11,10 @@ export default function getSortedImportStatements(importClauses: TypescriptImpor
 }
 
 function getImportClauseString(importClause: TypescriptImport): string {
+    if (!importClause.path) {
+        return '';
+    }
+
     let path = getPath(importClause);
     let semicolon = '';
     if (!options.getOmitSemicolon()) {
