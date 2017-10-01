@@ -5,6 +5,8 @@
 
 Sort import statements in Typescript code (Unofficial)
 
+This is a copy of the original VS Code extension by MLoughry with some added functionality https://github.com/MLoughry/sort-typescript-imports
+
 ## Features
 
 This configurable extension allows you to sort all the imports in a *.ts or *.tsx file.
