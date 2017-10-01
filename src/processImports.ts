@@ -6,7 +6,7 @@ export default function processImports(importClauses: TypescriptImport[]): Types
     importClauses = importClauses
         .map(importClause => {
             if (importClause.namedImports) {
-                importClause.namedImports.sort((a, b) => a.importName.localeCompare(b.importName, 'en', 'base'));
+                importClause.namedImports.sort((a, b) => a.importName.localeCompare(b.importName, 'en', { sensitivity: 'base' }));
             }
             return importClause;
         })
@@ -47,7 +47,7 @@ function compareImportClauses(a: TypescriptImport, b: TypescriptImport) {
 }
 
 function compareCaseInsensitive(a: string, b: string) {
-    return a.localeCompare(b, 'en', 'base');
+    return a.localeCompare(b, 'en', { sensitivity: 'base' });
 }
 
 function comparePath(a: TypescriptImport, b: TypescriptImport) {
