@@ -3,7 +3,7 @@
 
 # Sort Typescript imports
 
-Sort import statements in Typescript code
+Sort import statements in Typescript code (Unofficial)
 
 ## Features
 

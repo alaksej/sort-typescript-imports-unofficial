@@ -52,7 +52,8 @@
           "type": "string",
           "enum": [
             "path",
-            "importName"
+            "importName",
+            "regex"
           ],
           "description": "Whether to sort by the name of the import or the source path of the import",
           "default": "importName"
@@ -77,10 +78,45 @@
             "package"
           ]
         },
+        "typescript.extension.sortImports.regexSortOrder": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          },
+          "uniqueItems": true,
+          "description": "When `sortMethod` is set to `regex`, this controls the order to sort imports. Provide regexp to match the import path, and corresponding priority.",
+          "default": [
+            {
+              "expression": "@",
+              "priority": 0
+            },
+            {
+              "expression": "app/core|app/shared",
+              "priority": 2
+            },
+            {
+              "expression": "^app/|^\\.\\.\/",
+              "priority": 3
+            },
+            {
+              "expression": "^\\.\/",
+              "priority": 4
+            },
+            {
+              "expression": ".",
+              "priority": 0
+            }
+          ]
+        },
         "typescript.extension.sortImports.maxNamedImportsInSingleLine": {
           "type": "number",
           "description": "The maximum number of named imports to include in a single line",
           "default": 3
+        },
+        "typescript.extension.sortImports.useEmptyLineBetweenBlocks": {
+          "type": "boolean",
+          "description": "Whether to insert an empty line to separate imports of different priority",
+          "default": false
         },
         "typescript.extension.sortImports.quoteStyle": {
           "type": "string",
