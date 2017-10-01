@@ -18,6 +18,7 @@ This configurable extension allows you to sort all the imports in a *.ts or *.ts
 * `typescript.extension.sortImports.sortMethod`: The method to use for sorting the imports.
   * `'importName'`(default) sorts by the type and name of the import. Namespace imports are first, followed by default imports, named imports, and unnamed imports.
   * `'path'` sorts by the import path, sorting relative-path imports above package imports
+  * `'regex'` sorts by the regexps defined in the 'regexSortOrder' section
 * `typescript.extension.sortImports.pathSortOrder`: An array describing the order in which imports should be sorted by paths. Only applicable if `sortMethod` is set to `path`.
   * Default: `["relativeDownLevel", "relativeUpLevel", "package"]`
   * `package` - Any import path that does not begin with `.`
@@ -27,6 +28,8 @@ This configurable extension allows you to sort all the imports in a *.ts or *.ts
 * `typescript.extension.sortImports.quoteStyle`: The type of quotation mark to use. `single`(default) or `double`.
 * `typescript.extension.sortImports.sortOnSave`: If set to `true`, imports will be sorted whenever you save a file. Default: `false`
 * `typescript.extension.sortImports.omitSemicolon`: If set to `true`, the trailing semicolon will be omitted. Default: `false`
+* `typescript.extension.sortImports.regexSortOrder`: An array of objects { expression: string, priority: number } to sort the imports if the 'sortMethod' is set to 'regex'
+* `typescript.extension.sortImports.useEmptyLineBetweenBlocks`: Whether to inset an empty line between blocks of imports of different priority
 
 ## Known Issues
 
@@ -57,6 +60,8 @@ Initial release
 
 ## Example config
 
+This config is a part of vs code settings (Ctrl + ,)
+
     "typescript.extension.sortImports.pathSortOrder": [
         "package",
         "relativeUpLevel",
@@ -72,5 +77,4 @@ Initial release
     "typescript.extension.sortImports.sortMethod": "regex",
     "typescript.extension.sortImports.useEmptyLineBetweenBlocks": true,
     "typescript.extension.sortImports.sortOnSave": true,
-    "typescript.extension.sortImports.maxNamedImportsInSingleLine": 1,
-    "vsicons.projectDetection.autoReload": true
+    "typescript.extension.sortImports.maxNamedImportsInSingleLine": 1
