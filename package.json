@@ -34,7 +34,8 @@
   "activationEvents": [
     "onLanguage:typescript",
     "onLanguage:typescriptreact",
-    "onCommand:extension.sortTypescriptImports"
+    "onCommand:extension.sortTypescriptImports",
+    "onCommand:extension.sortTypescriptImportsAll"
   ],
   "main": "./out/src/extension",
   "contributes": {
@@ -42,6 +43,10 @@
       {
         "command": "extension.sortTypescriptImports",
         "title": "Sort imports"
+      },
+      {
+        "command": "extension.sortTypescriptImportsAll",
+        "title": "Sort Imports (All *.ts Files Inside src Folder)"
       }
     ],
     "configuration": {
