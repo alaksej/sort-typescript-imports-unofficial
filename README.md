@@ -30,9 +30,11 @@ This configurable extension allows you to sort all the imports in a *.ts or *.ts
 * `typescript.extension.sortImports.omitSemicolon`: If set to `true`, the trailing semicolon will be omitted. Default: `false`
 * `typescript.extension.sortImports.regexSortOrder`: An array of objects { expression: string, priority: number } to sort the imports if the 'sortMethod' is set to 'regex'
 * `typescript.extension.sortImports.useEmptyLineBetweenBlocks`: Whether to inset an empty line between blocks of imports of different priority
+* `typescript.extension.sortImports.groupByPath`: Whether to put all the imports with the same path into one import statement
 
 ## Known Issues
 
+* useEmptyLineBetweenBlocks inserts redundant empty lines after all the imports
 * This extension does not currently sort comments within the import block along with the import statements
 
 ## Future roadmap
@@ -62,19 +64,30 @@ Initial release
 
 This config is a part of vs code settings (Ctrl + ,)
 
-    "typescript.extension.sortImports.pathSortOrder": [
-        "package",
-        "relativeUpLevel",
-        "relativeDownLevel"
-    ],
-    "typescript.extension.sortImports.regexSortOrder": [
-        {"expression": "@", "priority": 0 },
-        {"expression": "app/core|app/shared", "priority": 2 },
-        {"expression": "^app/|^\\.\\.\/", "priority": 3 },
-        {"expression": "^\\.\/", "priority": 4 },
-        {"expression": ".", "priority": 0 }
+"typescript.extension.sortImports.regexSortOrder": [
+        {
+            "expression": "@",
+            "priority": 0
+        },
+        {
+            "expression": "app/core|app/shared",
+            "priority": 2
+        },
+        {
+            "expression": "^app/|^\\.\\.\/",
+            "priority": 3
+        },
+        {
+            "expression": "^\\.\/",
+            "priority": 4
+        },
+        {
+            "expression": ".",
+            "priority": 0
+        }
     ],
     "typescript.extension.sortImports.sortMethod": "regex",
-    "typescript.extension.sortImports.useEmptyLineBetweenBlocks": true,
-    "typescript.extension.sortImports.sortOnSave": true,
-    "typescript.extension.sortImports.maxNamedImportsInSingleLine": 1
+    "typescript.extension.sortImports.useEmptyLineBetweenBlocks": false,
+    "typescript.extension.sortImports.sortOnSave": false,
+    "typescript.extension.sortImports.groupByPath": true,
+    "typescript.extension.sortImports.maxNamedImportsInSingleLine": 5

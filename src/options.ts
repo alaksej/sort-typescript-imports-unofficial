@@ -17,6 +17,10 @@ export function getUseEmptyLineBetweenBlocks() {
     return getExtensionConfig().get('useEmptyLineBetweenBlocks');
 }
 
+export function getGroupByPath() {
+    return getExtensionConfig().get('groupByPath');
+}
+
 export function getSortOption() {
     return getExtensionConfig().get('sortMethod');
 }

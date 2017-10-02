@@ -2,7 +2,13 @@ import * as options from './options';
 import { TypescriptImport } from './TypescriptImport';
 import * as vscode from 'vscode';
 
-export default function processImports(importClauses: TypescriptImport[]): TypescriptImport[] {
+export default function processImports(importClauses: TypescriptImport[]): { original: TypescriptImport[], importClauses: TypescriptImport[] } {
+    const original: TypescriptImport[] = [...importClauses];
+
+    if (options.getGroupByPath()) {
+        importClauses = groupByPath(importClauses);
+    }
+
     importClauses = importClauses
         .map(importClause => {
             if (importClause.namedImports) {
@@ -24,10 +30,23 @@ export default function processImports(importClauses: TypescriptImport[]): Types
             }
             expanded.push(importClauses[i]);
         }
-        return expanded;
+        return { original, importClauses: expanded };
     }
 
-    return importClauses;
+    return { original, importClauses};
+}
+
+function groupByPath(importClauses: TypescriptImport[]): TypescriptImport[] {
+    const groupedImports: TypescriptImport[] = [];
+    importClauses.forEach(item => {
+        const found = groupedImports.find(i => i.path === item.path);
+        if (!found) {
+            groupedImports.push(item);
+        } else {
+            found.namedImports.push(...item.namedImports);
+        }
+    });
+    return groupedImports;
 }
 
 function compareImportClauses(a: TypescriptImport, b: TypescriptImport) {
