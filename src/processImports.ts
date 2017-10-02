@@ -2,8 +2,8 @@ import * as options from './options';
 import { TypescriptImport } from './TypescriptImport';
 import * as vscode from 'vscode';
 
-export default function processImports(importClauses: TypescriptImport[]): { original: TypescriptImport[], importClauses: TypescriptImport[] } {
-    const original: TypescriptImport[] = [...importClauses];
+export default function processImports(importClauses: TypescriptImport[]): { removeClauses: TypescriptImport[], importClauses: TypescriptImport[] } {
+    let removeClauses: TypescriptImport[] = [...importClauses];
 
     if (options.getGroupByPath()) {
         importClauses = groupByPath(importClauses);
@@ -18,8 +18,35 @@ export default function processImports(importClauses: TypescriptImport[]): { ori
         })
         .sort(compareImportClauses);
 
-    if (options.getUseEmptyLineBetweenBlocks()
-        && importClauses.length) {
+    if (options.getUseEmptyLineBetweenBlocks()) {
+        removeClauses = includeExistingLinesBetweenImports(removeClauses);
+        const expanded = insertEmptyLinesBetweenBlocks(importClauses);
+        return { removeClauses, importClauses: expanded };
+    }
+
+    return { removeClauses, importClauses};
+}
+
+function includeExistingLinesBetweenImports(clauses: TypescriptImport[]): TypescriptImport[] {
+    const expanded: TypescriptImport[] = [];
+    if (clauses && clauses.length) {
+        for (let i = 0; i < clauses.length - 1; i++) {
+            expanded.push(clauses[i]);
+            const linesBetween = clauses[i + 1].range.start.line - clauses[i].range.end.line;
+            if (linesBetween) {
+                const start = new vscode.Position(clauses[i].range.end.line, 0);
+                const end = new vscode.Position(clauses[i].range.end.line + linesBetween, 0);
+                const range: vscode.Range = new vscode.Range(start, end);
+                expanded.push({ range } as any);
+            }
+        }
+        expanded.push(clauses[clauses.length - 1]);
+    }
+    return expanded;
+}
+
+function insertEmptyLinesBetweenBlocks(importClauses: TypescriptImport[]): TypescriptImport[] {
+    if (importClauses.length) {
         const expanded: TypescriptImport[] = [];
         let currentPriority: number = importClauses[0].priority;
         for (let i = 0; i < importClauses.length; i++) {
@@ -30,10 +57,9 @@ export default function processImports(importClauses: TypescriptImport[]): { ori
             }
             expanded.push(importClauses[i]);
         }
-        return { original, importClauses: expanded };
+        return expanded;
     }
-
-    return { original, importClauses};
+    return [];
 }
 
 function groupByPath(importClauses: TypescriptImport[]): TypescriptImport[] {

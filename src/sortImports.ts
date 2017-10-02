@@ -9,7 +9,7 @@ export default function sortImports(document: vscode.TextDocument) {
     imports = result.importClauses;
     let sortedImportText = writeImports(imports);
 
-    let edits: vscode.TextEdit[] = result.original.map(importClause => vscode.TextEdit.delete(importClause.range));
+    let edits: vscode.TextEdit[] = result.removeClauses.map(clause => vscode.TextEdit.delete(clause.range));
     edits.push(vscode.TextEdit.insert(new vscode.Position(0, 0), sortedImportText));
     console.log('sorting complete');
     return edits;
