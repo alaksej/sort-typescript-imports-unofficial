@@ -108,6 +108,11 @@
           "description": "Whether to put all the imports with the same path into one import statement",
           "default": false
         },
+        "typescript.extension.sortImports.sortAllFiles": {
+          "type": "string",
+          "description": "A blob used to find files, e.g. '**/*.ts'",
+          "default": "**/*.ts"
+        },
         "typescript.extension.sortImports.quoteStyle": {
           "type": "string",
           "description": "The type of quote to use for the file or package paths",

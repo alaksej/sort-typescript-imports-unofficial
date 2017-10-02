@@ -31,6 +31,7 @@ This configurable extension allows you to sort all the imports in a *.ts or *.ts
 * `typescript.extension.sortImports.regexSortOrder`: An array of objects { expression: string, priority: number } to sort the imports if the 'sortMethod' is set to 'regex'
 * `typescript.extension.sortImports.useEmptyLineBetweenBlocks`: Whether to inset an empty line between blocks of imports of different priority
 * `typescript.extension.sortImports.groupByPath`: Whether to put all the imports with the same path into one import statement
+* `typescript.extension.sortImports.sortAllFiles`: A blob used to find files, e.g. '**/*.ts'
 
 ## Known Issues
 
@@ -86,6 +87,7 @@ This config is a part of vs code settings (Ctrl + ,)
             "priority": 0
         }
     ],
+    "typescript.extension.sortImports.sortAllFiles": "src/app/core/**/*.ts",
     "typescript.extension.sortImports.sortMethod": "regex",
     "typescript.extension.sortImports.useEmptyLineBetweenBlocks": false,
     "typescript.extension.sortImports.sortOnSave": false,
