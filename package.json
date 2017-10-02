@@ -91,26 +91,6 @@
           "uniqueItems": true,
           "description": "When `sortMethod` is set to `regex`, this controls the order to sort imports. Provide regexp to match the import path, and corresponding priority.",
           "default": [
-            {
-              "expression": "@",
-              "priority": 0
-            },
-            {
-              "expression": "app/core|app/shared",
-              "priority": 2
-            },
-            {
-              "expression": "^app/|^\\.\\.\/",
-              "priority": 3
-            },
-            {
-              "expression": "^\\.\/",
-              "priority": 4
-            },
-            {
-              "expression": ".",
-              "priority": 0
-            }
           ]
         },
         "typescript.extension.sortImports.maxNamedImportsInSingleLine": {

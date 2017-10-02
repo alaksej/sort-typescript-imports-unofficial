@@ -1,8 +1,8 @@
 import * as vscode from 'vscode';
 import { shouldSortOnSave } from './options';
+import sortImports from './sortImports';
 import sortInsideEditor from './sortInsideEditor';
 import sortOnSave from './sortOnSave';
-import sortImports from './sortImports';
 
 'use strict';
 // The module 'vscode' contains the VS Code extensibility API
@@ -28,23 +28,24 @@ export function activate(context: vscode.ExtensionContext) {
 
     let sortAllOnCommandDisposer = vscode.commands.registerCommand('extension.sortTypescriptImportsAll', () => {
         // The code you place here will be executed every time your command is executed
-        const filesPromise = vscode.workspace.findFiles('src/**/*.ts');
-        // filesPromise.then(files => {
-        //     const f = files[0];
-        //     vscode.workspace.openTextDocument(f).then(d => {
-        //         vscode.window.showTextDocument(d).then(e => {
-        //             // e.show();
-        //         });
-        //     });
-        // })
-        const edit: vscode.WorkspaceEdit = new vscode.WorkspaceEdit();
-        const docs = [];
+        const filesPromise = vscode.workspace.findFiles('**/*.ts', '**/node_modules/**');
+
         filesPromise.then(files => {
             if (files && files.length) {
                 files.forEach(file => {
+                    const edit: vscode.WorkspaceEdit = new vscode.WorkspaceEdit();
+                    let document: vscode.TextDocument;
                     vscode.workspace.openTextDocument(file)
-                        .then(doc => docs.push(doc)) //edit.set(doc.uri, sortImports(doc)))
-                        .then(() => vscode.workspace.applyEdit(edit));
+                        .then(doc => {
+                            document = doc;
+                            edit.set(doc.uri, sortImports(doc))
+                        })
+                        .then(() => { 
+                            vscode.workspace.applyEdit(edit).then(() => {
+                                document.save();
+                                console.log(`document ${document.fileName} saved`);
+                            })
+                        });
                 });
             }
         });
