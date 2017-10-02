@@ -18,7 +18,7 @@ export default function processImports(importClauses: TypescriptImport[]): { rem
         })
         .sort(compareImportClauses);
 
-    if (options.getUseEmptyLineBetweenBlocks()) {
+    if (options.getGroupByPath() && options.getUseEmptyLineBetweenBlocks()) {
         removeClauses = includeExistingLinesBetweenImports(removeClauses);
         const expanded = insertEmptyLinesBetweenBlocks(importClauses);
         return { removeClauses, importClauses: expanded };
