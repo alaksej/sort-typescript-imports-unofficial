@@ -50,8 +50,8 @@ function insertEmptyLinesBetweenBlocks(importClauses: TypescriptImport[]): Types
         const expanded: TypescriptImport[] = [];
         let currentPriority: number = importClauses[0].priority;
         for (let i = 0; i < importClauses.length; i++) {
-            if (importClauses[i].priority !== currentPriority
-                && i !== importClauses.length - 1) {
+            const p = importClauses[i].priority;
+            if (importClauses[i].priority !== currentPriority) {
                 expanded.push({} as any);
                 currentPriority = importClauses[i].priority;
             }
@@ -65,7 +65,7 @@ function insertEmptyLinesBetweenBlocks(importClauses: TypescriptImport[]): Types
 function groupByPath(importClauses: TypescriptImport[]): TypescriptImport[] {
     const groupedImports: TypescriptImport[] = [];
     importClauses.forEach(item => {
-        const found = groupedImports.find(i => i.path === item.path);
+        const found = groupedImports.find(i => i.path === item.path && !item.namespace);
         if (!found) {
             groupedImports.push(item);
         } else {
