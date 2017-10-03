@@ -65,7 +65,7 @@ function insertEmptyLinesBetweenBlocks(importClauses: TypescriptImport[]): Types
 function groupByPath(importClauses: TypescriptImport[]): TypescriptImport[] {
     const groupedImports: TypescriptImport[] = [];
     importClauses.forEach(item => {
-        const found = groupedImports.find(i => i.path === item.path && !item.namespace);
+        const found = groupedImports.find(i => i.path === item.path && !item.namespace && !i.namespace);
         if (!found) {
             groupedImports.push(item);
         } else {
