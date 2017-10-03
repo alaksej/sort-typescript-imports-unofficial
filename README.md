@@ -65,7 +65,7 @@ Initial release
 
 This config is a part of vs code settings (Ctrl + ,)
 
-"typescript.extension.sortImports.regexSortOrder": [
+    "typescript.extension.sortImports.regexSortOrder": [
         {
             "expression": "@",
             "priority": 0
@@ -87,9 +87,9 @@ This config is a part of vs code settings (Ctrl + ,)
             "priority": 0
         }
     ],
-    "typescript.extension.sortImports.sortAllFiles": "src/app/core/**/*.ts",
+    "typescript.extension.sortImports.sortAllFiles": "src/app/business-line/**/*.ts",
     "typescript.extension.sortImports.sortMethod": "regex",
-    "typescript.extension.sortImports.useEmptyLineBetweenBlocks": false,
     "typescript.extension.sortImports.sortOnSave": false,
     "typescript.extension.sortImports.groupByPath": true,
-    "typescript.extension.sortImports.maxNamedImportsInSingleLine": 5
+    "typescript.extension.sortImports.useEmptyLineBetweenBlocks": true,
+    "typescript.extension.sortImports.maxNamedImportsInSingleLine": 4
