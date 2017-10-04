@@ -1,10 +1,14 @@
+import * as vscode from 'vscode';
+import { shouldSortOnSave } from './options';
+import sortImports from './sortImports';
+import sortInsideEditor from './sortInsideEditor';
+import sortOnSave from './sortOnSave';
+import sortOutsideEditor from './sortOutsideEditor';
+import * as options from './options';
+
 'use strict';
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
-import * as vscode from 'vscode';
-import sortInsideEditor from './sortInsideEditor';
-import sortOnSave from './sortOnSave';
-import { shouldSortOnSave } from './options';
 
 let sortOnSaveDisposer: vscode.Disposable;
 
@@ -24,11 +28,20 @@ export function activate(context: vscode.ExtensionContext) {
         }
     });
 
+    let sortAllOnCommandDisposer = vscode.commands.registerCommand('extension.sortTypescriptImportsAll', () => {
+        // The code you place here will be executed every time your command is executed
+        const blob = options.getSortAllFiles();
+        const filesPromise = vscode.workspace.findFiles(blob, '**/node_modules/**');
+
+        sortOutsideEditor(filesPromise);
+    });
+
     let configurationWatcher = vscode.workspace.onDidChangeConfiguration(configure);
     configure();
 
     context.subscriptions.push(
         sortOnCommandDisposer,
+        sortAllOnCommandDisposer,
         configurationWatcher);
 }
 

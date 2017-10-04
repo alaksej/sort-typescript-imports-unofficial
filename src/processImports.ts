@@ -2,7 +2,13 @@ import * as options from './options';
 import { TypescriptImport } from './TypescriptImport';
 import * as vscode from 'vscode';
 
-export default function processImports(importClauses: TypescriptImport[]): TypescriptImport[] {
+export default function processImports(importClauses: TypescriptImport[]): { removeClauses: TypescriptImport[], importClauses: TypescriptImport[] } {
+    let removeClauses: TypescriptImport[] = [...importClauses];
+
+    if (options.getGroupByPath()) {
+        importClauses = groupByPath(importClauses);
+    }
+
     importClauses = importClauses
         .map(importClause => {
             if (importClause.namedImports) {
@@ -12,13 +18,40 @@ export default function processImports(importClauses: TypescriptImport[]): Types
         })
         .sort(compareImportClauses);
 
-    if (options.getUseEmptyLineBetweenBlocks()
-        && importClauses.length) {
+    if (options.getGroupByPath() && options.getUseEmptyLineBetweenBlocks()) {
+        removeClauses = includeExistingLinesBetweenImports(removeClauses);
+        const expanded = insertEmptyLinesBetweenBlocks(importClauses);
+        return { removeClauses, importClauses: expanded };
+    }
+
+    return { removeClauses, importClauses};
+}
+
+function includeExistingLinesBetweenImports(clauses: TypescriptImport[]): TypescriptImport[] {
+    const expanded: TypescriptImport[] = [];
+    if (clauses && clauses.length) {
+        for (let i = 0; i < clauses.length - 1; i++) {
+            expanded.push(clauses[i]);
+            const linesBetween = clauses[i + 1].range.start.line - clauses[i].range.end.line;
+            if (linesBetween) {
+                const start = new vscode.Position(clauses[i].range.end.line, 0);
+                const end = new vscode.Position(clauses[i].range.end.line + linesBetween, 0);
+                const range: vscode.Range = new vscode.Range(start, end);
+                expanded.push({ range } as any);
+            }
+        }
+        expanded.push(clauses[clauses.length - 1]);
+    }
+    return expanded;
+}
+
+function insertEmptyLinesBetweenBlocks(importClauses: TypescriptImport[]): TypescriptImport[] {
+    if (importClauses.length) {
         const expanded: TypescriptImport[] = [];
         let currentPriority: number = importClauses[0].priority;
         for (let i = 0; i < importClauses.length; i++) {
-            if (importClauses[i].priority !== currentPriority
-                && i !== importClauses.length - 1) {
+            const p = importClauses[i].priority;
+            if (importClauses[i].priority !== currentPriority) {
                 expanded.push({} as any);
                 currentPriority = importClauses[i].priority;
             }
@@ -26,8 +59,20 @@ export default function processImports(importClauses: TypescriptImport[]): Types
         }
         return expanded;
     }
+    return [];
+}
 
-    return importClauses;
+function groupByPath(importClauses: TypescriptImport[]): TypescriptImport[] {
+    const groupedImports: TypescriptImport[] = [];
+    importClauses.forEach(item => {
+        const found = groupedImports.find(i => i.path === item.path && !item.namespace && !i.namespace);
+        if (!found) {
+            groupedImports.push(item);
+        } else {
+            found.namedImports.push(...item.namedImports);
+        }
+    });
+    return groupedImports;
 }
 
 function compareImportClauses(a: TypescriptImport, b: TypescriptImport) {

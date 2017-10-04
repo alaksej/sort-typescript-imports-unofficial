@@ -3,8 +3,8 @@ import sortImports from './sortImports';
 import processImports from './processImports';
 import writeImports from './writeImports';
 
-export default function sortInsideEditor() {
-    let editor = vscode.window.activeTextEditor;
+export default function sortInsideEditor(editor?: vscode.TextEditor) {
+    editor = editor || vscode.window.activeTextEditor;
 
     let edits: vscode.TextEdit[] = sortImports(editor.document);
 
